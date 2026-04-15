@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>우리의 온도</title>
+  <style>
+    /* ── Google Fonts (시스템 폴백 포함) ── */
+    @import url('https://fonts.googleapis.com/css2?family=Gaegu:wght@300;400;700&family=Nanum+Pen+Script&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+    /* ── CSS 변수 ── */
+    :root {
+      --main: #E8742A;
+      --dark-brown: #7B3F2E;
+      --green: #8DB87A;
+      --bg: #FDF8F3;
+      --text: #2E1F18;
+      --card-bg: #FFFAF5;
+      --radius: 18px;
+      --shadow: 0 4px 24px rgba(46,31,24,0.09);
+    }
+
+    /* ── 리셋 ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* ── 손그림 SVG 구분선 공통 ── */
+    .crayon-divider {
+      width: 100%;
+      overflow: visible;
+      display: block;
+      margin: 0;
+    }
+
+    /* ══════════════════════════════
+       HEADER
+    ══════════════════════════════ */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(253,248,243,0.94);
+      backdrop-filter: blur(8px);
+      border-bottom: none;
+      padding: 0 5vw;
+    }
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      position: relative;
+    }
+    /* 헤더 하단 손그림 선 */
+    .header-line {
+      position: absolute;
+      bottom: 0; left: 0; width: 100%;
+      height: 6px; pointer-events: none;
+    }
+
+    .logo {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: 1.85rem;
+      color: var(--main);
+      letter-spacing: 0.02em;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    nav { display: flex; gap: 2rem; align-items: center; }
+    nav a {
+      font-size: 0.93rem;
+      font-weight: 500;
+      color: var(--text);
+      position: relative;
+      padding-bottom: 3px;
+      transition: color .2s;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 0; height: 2px;
+      background: var(--main);
+      border-radius: 2px;
+      transition: width .25s;
+    }
+    nav a:hover { color: var(--main); }
+    nav a:hover::after { width: 100%; }
+
+    /* 햄버거 */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px; height: 3px;
+      background: var(--text);
+      border-radius: 3px;
+      transition: all .3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+    /* 모바일 메뉴 */
+    .mobile-nav {
+      display: none;
+      flex-direction: column;
+      background: var(--card-bg);
+      padding: 1.2rem 5vw 1.5rem;
+      gap: 1.1rem;
+      border-bottom: 2px solid #f0e8e0;
+    }
+    .mobile-nav a {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      padding: 0.2rem 0;
+      border-bottom: 1px dashed #e0d4c8;
+    }
+    .mobile-nav.active { display: flex; }
+
+    /* ══════════════════════════════
+       HERO / 메인 배너
+    ══════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 82vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #FFFDF9;
+    }
+    /* 배경 장식 원 */
+    .hero-deco {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-deco-1 {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, rgba(141,184,122,.10) 0%, transparent 70%);
+      top: -80px; right: -80px;
+    }
+    .hero-deco-2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(141,184,122,.12) 0%, transparent 70%);
+      bottom: 30px; left: -60px;
+    }
+    .hero-deco-3 {
+      width: 180px; height: 180px;
+      background: radial-gradient(circle, rgba(253,248,243,.6) 0%, transparent 70%);
+      top: 50%; left: 42%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      text-align: center;
+      padding: 4rem 5vw;
+      max-width: 800px;
+    }
+    /* 화분 일러스트 */
+    .hero-plant-wrap {
+      margin-bottom: 2.4rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .hero-plant-svg {
+      width: 200px;
+      height: 230px;
+      filter: drop-shadow(0 10px 22px rgba(141,184,122,.28));
+    }
+
+    .hero-badge {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--main);
+      background: rgba(232,116,42,.1);
+      border-radius: 99px;
+      padding: 4px 14px;
+      margin-bottom: 1rem;
+    }
+    .hero-title {
+      font-family: 'Gaegu', cursive;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      color: var(--dark-brown);
+      line-height: 1.1;
+      margin-bottom: 0.8rem;
+    }
+    .hero-sub {
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      color: var(--dark-brown);
+      font-weight: 300;
+      margin-bottom: 2.2rem;
+      max-width: 380px;
+    }
+    .hero-btn {
+      display: inline-block;
+      background: var(--green);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 0.75rem 2.2rem;
+      border-radius: 99px;
+      box-shadow: 0 6px 20px rgba(141,184,122,.35);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .hero-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(141,184,122,.5);
+    }
+
+    /* 물결 구분선 */
+    .wave-divider { display: block; width: 100%; line-height: 0; }
+
+    /* ══════════════════════════════
+       공통 섹션
+    ══════════════════════════════ */
+    section { padding: 5rem 5vw; }
+    .section-inner { max-width: 1100px; margin: 0 auto; }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--main);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: var(--text);
+      margin-bottom: 0.4rem;
+      line-height: 1.2;
+    }
+    .section-desc {
+      font-size: 0.92rem;
+      color: #9a7a6a;
+      margin-bottom: 2.8rem;
+    }
+
+    /* 손그림 언더라인 */
+    .crayon-underline {
+      display: block;
+      margin: 0.3rem 0 0;
+    }
+
+    /* ══════════════════════════════
+       최근 일상 섹션 — 카드
+    ══════════════════════════════ */
+    .daily-section { background: var(--bg); }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.6rem;
+    }
+    .post-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform .25s, box-shadow .25s;
+      cursor: pointer;
+      position: relative;
+    }
+    .post-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 36px rgba(46,31,24,.14);
+    }
+    /* 크레파스 테두리 효과 */
+    .post-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      border: 2.5px solid transparent;
+      background: linear-gradient(var(--card-bg), var(--card-bg)) padding-box,
+                  linear-gradient(135deg, var(--main), var(--green), var(--dark-brown)) border-box;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .25s;
+    }
+    .post-card:hover::before { opacity: 1; }
+
+    .card-img-wrap { position: relative; overflow: hidden; height: 200px; }
+    .card-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .35s;
+    }
+    .post-card:hover .card-img-wrap img { transform: scale(1.05); }
+
+    .card-tag-wrap {
+      position: absolute;
+      bottom: 10px; left: 12px;
+      display: flex; gap: 6px;
+    }
+    .card-tag {
+      background: rgba(255,255,255,.88);
+      color: var(--main);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+      border: 1.5px solid var(--main);
+    }
+
+    .card-body { padding: 1.2rem 1.3rem 1.5rem; }
+    .card-date {
+      font-size: 0.73rem;
+      color: #b89a8a;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.55rem;
+      line-height: 1.4;
+    }
+    .card-excerpt {
+      font-size: 0.84rem;
+      color: #7a5a4e;
+      line-height: 1.65;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ══════════════════════════════
+       메뉴 바로가기 섹션
+    ══════════════════════════════ */
+    .shortcut-section {
+      background: linear-gradient(135deg, #FFF5EC 0%, #F5EDE3 100%);
+      position: relative;
+    }
+    .shortcut-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.4rem;
+    }
+    .shortcut-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 2rem 1.2rem 1.8rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: transform .25s, box-shadow .25s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .shortcut-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 100%; height: 4px;
+      background: var(--main);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform .3s;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .shortcut-card:hover { transform: translateY(-5px); box-shadow: 0 14px 34px rgba(46,31,24,.13); }
+    .shortcut-card:hover::after { transform: scaleX(1); }
+
+    .sc-icon {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+    }
+    .sc-icon-1 { background: rgba(232,116,42,.14); }
+    .sc-icon-2 { background: rgba(141,184,122,.18); }
+    .sc-icon-3 { background: rgba(123,63,46,.12); }
+    .sc-icon-4 { background: rgba(232,116,42,.08); }
+
+    .sc-title {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: 1.35rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+    .sc-desc {
+      font-size: 0.78rem;
+      color: #a08070;
+      line-height: 1.5;
+    }
+
+    /* ══════════════════════════════
+       가족 소개 섹션
+    ══════════════════════════════ */
+    .about-section { background: var(--bg); }
+    .about-inner {
+      display: flex;
+      align-items: center;
+      gap: 4rem;
+      flex-wrap: wrap;
+    }
+    .about-text-side { flex: 1; min-width: 260px; }
+    .about-quote {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: var(--dark-brown);
+      line-height: 1.5;
+      margin-bottom: 1.4rem;
+      position: relative;
+      padding-left: 1.2rem;
+    }
+    .about-quote::before {
+      content: '"';
+      font-size: 4rem;
+      color: var(--main);
+      opacity: .25;
+      position: absolute;
+      top: -1rem; left: -0.8rem;
+      font-family: serif;
+      line-height: 1;
+    }
+    .about-body {
+      font-size: 0.91rem;
+      color: #7a5a4e;
+      line-height: 1.8;
+      margin-bottom: 1.8rem;
+    }
+    .about-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      border: 2.5px solid var(--main);
+      color: var(--main);
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 0.65rem 1.8rem;
+      border-radius: 99px;
+      transition: background .2s, color .2s;
+    }
+    .about-btn:hover { background: var(--main); color: #fff; }
+
+    .about-photo-side {
+      flex: 0 0 auto;
+      position: relative;
+    }
+    .about-photo-frame {
+      position: relative;
+      width: 280px;
+    }
+    .about-photo {
+      width: 100%; height: 320px;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    /* 크레파스 프레임 데코 */
+    .about-deco-box {
+      position: absolute;
+      top: -14px; left: -14px;
+      width: calc(100% + 14px);
+      height: calc(100% + 14px);
+      border-radius: 24px;
+      pointer-events: none;
+    }
+    .about-sticker {
+      position: absolute;
+      bottom: -18px; right: -18px;
+      width: 72px; height: 72px;
+      background: var(--main);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 6px 18px rgba(232,116,42,.35);
+      color: #fff;
+    }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    footer {
+      background: var(--dark-brown);
+      color: rgba(255,255,255,.7);
+      text-align: center;
+      padding: 2.5rem 5vw;
+    }
+    .footer-logo {
+      font-family: 'Nanum Pen Script', cursive;
+      font-size: 1.7rem;
+      color: rgba(255,255,255,.9);
+      margin-bottom: 0.6rem;
+    }
+    .footer-copyright {
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+    }
+
+    /* ══════════════════════════════
+       애니메이션
+    ══════════════════════════════ */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .fade-in-delay-1 { transition-delay: .1s; }
+    .fade-in-delay-2 { transition-delay: .2s; }
+    .fade-in-delay-3 { transition-delay: .3s; }
+
+    /* ══════════════════════════════
+       반응형
+    ══════════════════════════════ */
+    @media (max-width: 900px) {
+      .cards-grid { grid-template-columns: 1fr 1fr; }
+      .shortcut-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      nav { display: none; }
+      .hamburger { display: flex; }
+      .hero { min-height: 70vh; }
+      .hero-photo { width: 200px; height: 200px; }
+      .crayon-circle { width: 224px; height: 224px; }
+      .cards-grid { grid-template-columns: 1fr; }
+      .shortcut-grid { grid-template-columns: 1fr 1fr; }
+      .about-inner { flex-direction: column; }
+      .about-photo-frame { width: 100%; }
+      .about-photo { height: 240px; }
+    }
+    @media (max-width: 380px) {
+      .shortcut-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">우리의 온도</a>
+    <nav>
+      <a href="#daily">우리의 일상</a>
+      <a href="#travel">우리의 여행</a>
+      <a href="#growth">우리의 성장</a>
+      <a href="#about">우리에 대해</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="메뉴 열기">
+      <span></span><span></span><span></span>
+    </button>
+    <!-- 헤더 하단 손그림 선 -->
+    <svg class="header-line" viewBox="0 0 1100 6" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 3 Q60 1 120 3.5 Q200 5.5 300 2.5 Q420 0 540 3 Q660 5.5 780 2 Q900 0 1000 3.5 Q1060 5 1100 3"
+        stroke="#E8742A" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.45"/>
+    </svg>
+  </div>
+</header>
+<!-- 모바일 메뉴 -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#daily">우리의 일상</a>
+  <a href="#travel">우리의 여행</a>
+  <a href="#growth">우리의 성장</a>
+  <a href="#about">우리에 대해</a>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-deco hero-deco-1"></div>
+  <div class="hero-deco hero-deco-2"></div>
+  <div class="hero-deco hero-deco-3"></div>
+
+  <div class="hero-content">
+    <!-- 색연필 느낌 화분 SVG 일러스트 -->
+    <div class="hero-plant-wrap">
+      <svg class="hero-plant-svg" viewBox="0 0 200 230" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+        <!-- ── 잎 (화분보다 먼저 그려서 뒤에 깔리게) ── -->
+
+        <!-- 왼쪽 아래 큰 잎 -->
+        <path d="M97 148 Q72 138 52 118 Q44 106 50 96 Q62 114 94 130"
+          fill="#A8D98A" stroke="#6AAD50" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M97 148 Q72 128 52 98" stroke="#5A9A40" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+        <!-- 오른쪽 아래 큰 잎 -->
+        <path d="M103 142 Q128 130 148 108 Q158 96 150 86 Q138 106 106 126"
+          fill="#B8E098" stroke="#6AAD50" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M103 142 Q130 122 150 88" stroke="#5A9A40" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+        <!-- 왼쪽 중간 잎 -->
+        <path d="M95 118 Q68 102 46 78 Q52 72 60 80 Q78 96 96 112"
+          fill="#90CC70" stroke="#5A9A40" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M95 118 Q70 96 48 76" stroke="#4A8A32" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+        <!-- 오른쪽 중간 잎 -->
+        <path d="M106 112 Q132 94 155 70 Q150 64 142 72 Q124 90 104 108"
+          fill="#9CDA78" stroke="#5A9A40" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M106 112 Q132 90 154 68" stroke="#4A8A32" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+        <!-- 왼쪽 위 잎 -->
+        <path d="M98 88 Q74 70 60 44 Q68 40 76 52 Q88 70 100 84"
+          fill="#B0E090" stroke="#60A848" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M98 88 Q76 64 62 44" stroke="#4A8A32" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+        <!-- 오른쪽 위 잎 -->
+        <path d="M104 82 Q128 62 144 36 Q136 32 128 44 Q116 64 102 78"
+          fill="#C0EC9E" stroke="#60A848" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M104 82 Q128 58 142 36" stroke="#4A8A32" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+        <!-- 꼭대기 잎 -->
+        <path d="M100 60 Q90 38 88 18 Q100 12 104 34 Q108 18 118 20 Q112 40 100 60Z"
+          fill="#D0F0AE" stroke="#60A848" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M100 60 Q100 36 100 14" stroke="#4A8A32" stroke-width="1.4" stroke-linecap="round" fill="none"/>
+
+        <!-- 줄기 (잎 위에 살짝) -->
+        <path d="M100 152 Q99 130 100 108 Q101 88 100 60"
+          stroke="#6AAD50" stroke-width="3.5" stroke-linecap="round"/>
+
+        <!-- ── 화분 ── -->
+
+        <!-- 흙 (타원) -->
+        <ellipse cx="100" cy="155" rx="44" ry="9" fill="#8C6040"/>
+        <!-- 흙 색연필 질감 선 -->
+        <path d="M62 154 Q80 158 100 155 Q120 152 138 154" stroke="#6B4226" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.6"/>
+
+        <!-- 화분 테두리 띠 (윗부분) -->
+        <path d="M56 155 Q56 162 58 164 Q100 168 142 164 Q144 162 144 155"
+          fill="#D4855A" stroke="#B0603A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- 화분 몸통 -->
+        <path d="M58 164 Q54 182 52 198 Q52 206 100 208 Q148 206 148 198 Q146 182 142 164 Q100 170 58 164Z"
+          fill="#C8714C" stroke="#A05030" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+        <!-- 화분 색연필 음영 (왼쪽) -->
+        <path d="M62 168 Q58 186 56 200" stroke="#B06040" stroke-width="2" stroke-linecap="round" opacity="0.45" fill="none"/>
+        <!-- 화분 색연필 음영 (오른쪽) -->
+        <path d="M138 168 Q142 186 144 200" stroke="#B06040" stroke-width="2" stroke-linecap="round" opacity="0.35" fill="none"/>
+        <!-- 화분 하이라이트 -->
+        <path d="M72 166 Q70 186 70 200" stroke="#E8906A" stroke-width="2.5" stroke-linecap="round" opacity="0.4" fill="none"/>
+
+        <!-- 화분 테두리 띠 색연필 선 -->
+        <path d="M57 157 Q100 161 143 157" stroke="#C06840" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.5"/>
+
+      </svg>
+    </div>
+
+    <span class="hero-badge">Our Family Story</span>
+    <h1 class="hero-title">우리의 온도</h1>
+    <p class="hero-sub">우리 가족의 따뜻한 하루하루를 기록합니다</p>
+    <a href="#daily" class="hero-btn">이야기 보러 가기 →</a>
+  </div>
+</section>
+
+<!-- 물결 구분 -->
+<svg class="wave-divider" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 40 Q180 10 360 38 Q540 66 720 36 Q900 6 1080 34 Q1260 62 1440 40 L1440 60 L0 60Z"
+    fill="#FDF8F3"/>
+</svg>
+
+<!-- ═══════════════════════════════════════════
+     최근 일상 섹션
+═══════════════════════════════════════════ -->
+<section class="daily-section" id="daily">
+  <div class="section-inner">
+    <span class="section-label">✦ Recent Daily</span>
+    <h2 class="section-title">우리의 일상
+      <!-- 크레파스 언더라인 -->
+      <svg class="crayon-underline" viewBox="0 0 240 10" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 5 Q40 2 80 6 Q120 9 160 4 Q200 1 236 5"
+          stroke="#E8742A" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+    </h2>
+    <p class="section-desc">소소하지만 빛나는 우리 가족의 하루들</p>
+
+    <div class="cards-grid">
+      <!-- 카드 1 -->
+      <article class="post-card fade-in fade-in-delay-1">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x200/F5D5C0/7B3F2E?text=일상+사진+1" alt="일상 포스팅 사진 1" />
+          <div class="card-tag-wrap">
+            <span class="card-tag">#주말</span>
+            <span class="card-tag">#공원</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-date">2025년 06월 14일 토요일</p>
+          <h3 class="card-title">오늘은 한강 공원에서 돗자리 피크닉!</h3>
+          <p class="card-excerpt">오랜만에 날씨가 너무 좋아서 급하게 돗자리 챙겨 나갔어요. 아이들은 뛰어다니느라 신이 났고, 엄마는 잠깐 눈 붙이는 척했지만 사실 아이들 웃음소리 들으며 행복했답니다.</p>
+        </div>
+      </article>
+
+      <!-- 카드 2 -->
+      <article class="post-card fade-in fade-in-delay-2">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x200/D5E8C8/4A6B3A?text=일상+사진+2" alt="일상 포스팅 사진 2" />
+          <div class="card-tag-wrap">
+            <span class="card-tag">#요리</span>
+            <span class="card-tag">#첫째</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-date">2025년 06월 11일 수요일</p>
+          <h3 class="card-title">첫째랑 함께 만든 쿠키 🍪</h3>
+          <p class="card-excerpt">첫째가 유튜브 보고 쿠키 만들고 싶다고 해서 같이 도전했어요. 모양은 제각각이지만 맛은 최고였고, 반죽 묻은 얼굴이 너무 귀여웠어요.</p>
+        </div>
+      </article>
+
+      <!-- 카드 3 -->
+      <article class="post-card fade-in fade-in-delay-3">
+        <div class="card-img-wrap">
+          <img src="https://placehold.co/400x200/FAE5D0/8B4513?text=일상+사진+3" alt="일상 포스팅 사진 3" />
+          <div class="card-tag-wrap">
+            <span class="card-tag">#둘째</span>
+            <span class="card-tag">#첫걸음</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="card-date">2025년 06월 08일 일요일</p>
+          <h3 class="card-title">둘째 혼자 양치질 처음 해봤어요</h3>
+          <p class="card-excerpt">아직 어설프지만 씩씩하게 스스로 해보겠다고 칫솔 잡더라고요. 조그만 손으로 열심히 닦는 모습에 엄마 마음이 뭉클했습니다.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 손그림 섹션 구분선 -->
+<svg class="crayon-divider" viewBox="0 0 1440 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 9 Q100 4 200 10 Q320 16 440 8 Q560 2 680 9 Q800 16 920 7 Q1040 0 1160 9 Q1300 16 1440 9"
+    stroke="#8DB87A" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.45"/>
+</svg>
+
+<!-- ═══════════════════════════════════════════
+     메뉴 바로가기 섹션
+═══════════════════════════════════════════ -->
+<section class="shortcut-section" id="travel">
+  <div class="section-inner">
+    <span class="section-label">✦ Go Explore</span>
+    <h2 class="section-title">어디로 갈까요?
+      <svg class="crayon-underline" viewBox="0 0 220 10" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 5 Q40 2 80 6 Q120 9 160 4 Q196 1 218 5"
+          stroke="#8DB87A" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+    </h2>
+    <p class="section-desc">우리 가족의 이야기가 담긴 공간들</p>
+
+    <div class="shortcut-grid">
+      <a href="#daily" class="shortcut-card fade-in fade-in-delay-1">
+        <div class="sc-icon sc-icon-1">📷</div>
+        <div class="sc-title">우리의 일상</div>
+        <p class="sc-desc">소소한 하루하루<br>가족 스냅샷과 이야기</p>
+      </a>
+      <a href="#" class="shortcut-card fade-in fade-in-delay-2">
+        <div class="sc-icon sc-icon-2">✈️</div>
+        <div class="sc-title">우리의 여행</div>
+        <p class="sc-desc">분기별 여행 기록<br>아이들과 함께한 곳들</p>
+      </a>
+      <a href="#" class="shortcut-card fade-in fade-in-delay-3">
+        <div class="sc-icon sc-icon-3">🌱</div>
+        <div class="sc-title">우리의 성장</div>
+        <p class="sc-desc">첫째·둘째 성장일기<br>월별로 기록하는 우리 아이</p>
+      </a>
+      <a href="#about" class="shortcut-card fade-in fade-in-delay-3">
+        <div class="sc-icon sc-icon-4">🏠</div>
+        <div class="sc-title">우리에 대해</div>
+        <p class="sc-desc">우리 가족을 소개합니다</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 손그림 섹션 구분선 -->
+<svg class="crayon-divider" viewBox="0 0 1440 18" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 9 Q120 14 240 7 Q380 2 520 10 Q660 16 800 6 Q940 0 1080 8 Q1220 14 1440 9"
+    stroke="#E8742A" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.35"/>
+</svg>
+
+<!-- ═══════════════════════════════════════════
+     가족 소개 섹션
+═══════════════════════════════════════════ -->
+<section class="about-section" id="about">
+  <div class="section-inner">
+    <div class="about-inner">
+      <div class="about-text-side fade-in">
+        <span class="section-label">✦ About Us</span>
+        <h2 class="section-title">우리에 대해
+          <svg class="crayon-underline" viewBox="0 0 200 10" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 5 Q40 2 80 6 Q120 9 160 4 Q185 1 198 5"
+              stroke="#7B3F2E" stroke-width="3.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+          </svg>
+        </h2>
+        <blockquote class="about-quote">
+          따뜻하고 씩씩하게,<br>함께라서 더 빛나는 우리 셋
+        </blockquote>
+        <p class="about-body">
+          우리 가족은 엄마 한 명, 아이 둘.<br>
+          완벽하지 않아도 매일 최선을 다해 서로를 응원합니다.<br>
+          이 작은 기록들이 훗날 우리에게 가장 소중한 보물이 될 거라 믿어요.
+        </p>
+        <a href="#" class="about-btn">우리 가족 만나기 →</a>
+      </div>
+
+      <div class="about-photo-side fade-in fade-in-delay-2">
+        <div class="about-photo-frame">
+          <img class="about-photo"
+            src="https://placehold.co/280x320/FAE5D0/7B3F2E?text=가족+사진"
+            alt="가족 소개 사진" />
+          <!-- 크레파스 장식 프레임 SVG -->
+          <svg class="about-deco-box" viewBox="0 0 300 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="4" width="292" height="332" rx="26"
+              stroke="#8DB87A" stroke-width="3.5" stroke-dasharray="10 6"
+              stroke-linecap="round" opacity="0.5"/>
+          </svg>
+          <div class="about-sticker">🌿</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-logo">우리의 온도</div>
+  <p class="footer-copyright">© 2025 우리의 온도 · All rights reserved</p>
+</footer>
+
+<!-- ═══════════════════════════════════════════
+     JS
+═══════════════════════════════════════════ -->
+<script>
+  /* 햄버거 메뉴 */
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobileNav');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    mobileNav.classList.toggle('active');
+  });
+  mobileNav.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      mobileNav.classList.remove('active');
+    });
+  });
+
+  /* 스크롤 페이드인 */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
